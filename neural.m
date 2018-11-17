@@ -9,7 +9,7 @@ function neural()
     n = numel(nNodes);
     w = {}; % weight
     b = {}; % bias       
-    eta = 4;
+    eta = 4; % learning rate
     
     % === set up random starting values ===
     initScale = 0.001;
