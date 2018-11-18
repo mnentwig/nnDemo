@@ -1,4 +1,4 @@
-% neural network demo
+% Neural network demo
 % Markus Nentwig, 2018
 % largely based on the equations in early chapters of http://neuralnetworksanddeeplearning.com
 % Using the same dataset for training and final evaluation(!), 99% hit probability can be achieved.
@@ -52,7 +52,7 @@ function neural()
                     err(ix) = (w{ix+1}.' * err{ix+1}) .* ds{ix};
                 end
                 
-                % === update coefficients ===
+                % === average next coefficient update ('stochastic gradient') ===
                 wStep{ix} = wStep{ix} + err{ix} * (a{ix-1}.');
                 bStep{ix} = bStep{ix} + err{ix};
             end
@@ -64,7 +64,7 @@ function neural()
             b{ix} = b{ix} - eta * bStep{ix} / nBatch;
         end
  
-        % === evaluate network ===
+        % === evaluate network now and then ===
         if mod(ixEpoch, 1000) == 0 
             r = check(dataset, w, b);
             printf('%8i\t%1.3f %%\n', ixEpoch, r*100);
