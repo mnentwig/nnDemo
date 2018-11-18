@@ -1,0 +1,43 @@
+The following code snippet can be inserted to check the calculated gradient estimate against a numerical approximation.
+Note, there is a factor 2 difference to the book (for both weights and bias => effectively just scaling the learning rate), otherwise results should match to 5 or 6 digits.
+For the given examples, one needs to find a weight first with non-zero sensitivity (since the data has many 'white' pixels that don't exercise connected weights)
+
+            if false
+                C1 = costFun(x, y, w, b);                
+                if false
+                    delta = 1e-6;
+                    ixCoeff = 4;            
+                    ixStage = 2;
+                    b{ixStage}(ixCoeff) = b{ixStage}(ixCoeff)+delta;
+                    dC = delta*err{ixStage}(ixCoeff)*2;
+                else
+                    ixCoeff = 10;
+                    delta = 1e-3;
+                    ixStage = 2;
+                    
+                    sens = err{ixStage}*a{ixStage-1}.';
+                    ixCoeff = find(sens == max(max(sens)));
+
+                    w{ixStage}(ixCoeff) = w{ixStage}(ixCoeff)+delta;
+                    
+                    dC = delta*(err{ixStage}*a{ixStage-1}.')(ixCoeff)*2;
+                end
+                C2 = costFun(x, y, w, b);
+                D1 = C2-C1;
+                D2 = dC;
+                plot(D1, D2, '.');pause(0.001); % this should be generally a straight line, with outliers where delta is too big
+            end
+
+...
+
+function C = costFun(x, y, w, b)
+    a = {x};
+    z = {};
+    n = numel(b);
+    for ix = 2 : n
+        z(ix) = w{ix}*a{ix-1}+b{ix};
+        a(ix) = sigmoid(z{ix});        
+    end
+    C = (a{n}-y); C = C'*C;
+end
+
