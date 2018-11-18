@@ -12,10 +12,10 @@ function neural()
     eta = 4; % learning rate
     
     % === set up random starting values ===
-    initScale = 0.001;
+    initScale = 1/sqrt(nNodes(1)); % init weight likely not to overdrive the input neurons
     for ix = 2 : n
         w{ix} = randn(nNodes(ix), nNodes(ix-1)) * initScale;
-        b(ix) = randn(nNodes(ix), 1) * initScale;
+        b(ix) = randn(nNodes(ix), 1);
     end
     
     % === iterate over learning epochs ===
